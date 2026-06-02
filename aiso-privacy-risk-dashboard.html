@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Risk Dashboard — AISO</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f3;
+      color: #1a1a18;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 0.5px solid #d3d1c7;
+    }
+    .logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-circle {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #185FA5;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 13px; font-weight: 600; letter-spacing: 0.03em;
+    }
+    .logo-text { font-size: 15px; font-weight: 500; color: #1a1a18; }
+    .logo-sub { font-size: 12px; color: #888780; margin-top: 1px; }
+    .header-tag {
+      font-size: 11px; background: #E6F1FB; color: #185FA5;
+      border: 0.5px solid #B5D4F4; border-radius: 6px; padding: 3px 10px;
+    }
+
+    /* Card */
+    .card {
+      background: #fff;
+      border: 0.5px solid #d3d1c7;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 12px;
+    }
+
+    /* Steps */
+    .step { display: none; }
+    .step.active { display: block; }
+
+    /* Progress */
+    .progress-bar { height: 4px; background: #e8e8e4; border-radius: 2px; margin-bottom: 2rem; }
+    .progress-fill { height: 4px; border-radius: 2px; background: #185FA5; transition: width 0.3s ease; }
+
+    /* Question */
+    .q-label { font-size: 13px; color: #888780; margin-bottom: 6px; }
+    .q-title { font-size: 17px; font-weight: 500; margin-bottom: 1.25rem; line-height: 1.45; color: #1a1a18; }
+
+    /* Option buttons */
+    .opt-btn {
+      display: block; width: 100%; text-align: left;
+      background: #fff; border: 0.5px solid #c0bfb6;
+      border-radius: 8px; padding: 11px 14px; margin-bottom: 8px;
+      cursor: pointer; font-size: 14px; color: #1a1a18;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .opt-btn:hover { background: #f5f5f3; }
+    .opt-btn.selected { border: 1.5px solid #185FA5; background: #E6F1FB; color: #0C447C; }
+
+    /* Nav buttons */
+    .nav-btn {
+      background: #fff; border: 0.5px solid #c0bfb6; border-radius: 8px;
+      padding: 9px 18px; cursor: pointer; font-size: 14px; color: #1a1a18;
+      transition: background 0.15s;
+    }
+    .nav-btn:hover { background: #f5f5f3; }
+    .nav-btn.primary { background: #185FA5; color: #fff; border-color: #185FA5; font-weight: 500; }
+    .nav-btn.primary:hover { background: #0C447C; }
+
+    /* Badges */
+    .badge { font-size: 11px; padding: 3px 10px; border-radius: 6px; font-weight: 500; display: inline-block; }
+    .badge-high { background: #FCEBEB; color: #A32D2D; }
+    .badge-medium { background: #FAEEDA; color: #854F0B; }
+    .badge-low { background: #EAF3DE; color: #3B6D11; }
+
+    /* Meters */
+    .meter-track { height: 8px; background: #e8e8e4; border-radius: 4px; margin-top: 5px; }
+    .meter-fill { height: 8px; border-radius: 4px; }
+
+    /* Article tag */
+    .article-tag {
+      font-size: 11px; background: #f1efe8; border: 0.5px solid #d3d1c7;
+      border-radius: 6px; padding: 2px 7px; color: #5f5e5a; white-space: nowrap;
+    }
+
+    /* Risk section title */
+    .section-title {
+      font-size: 12px; font-weight: 500; color: #888780;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    /* Rec items */
+    .rec-item { font-size: 13px; color: #5f5e5a; margin-bottom: 8px; display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
+
+    /* Intro icons */
+    .intro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.75rem; }
+    .intro-icon-card { background: #f5f5f3; border-radius: 8px; padding: 14px; text-align: center; }
+    .intro-icon-card p { font-size: 12px; color: #888780; margin: 6px 0 0; }
+
+    /* Overall score row */
+    .score-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+    .score-label { font-size: 13px; color: #888780; margin-bottom: 2px; }
+    .score-value { font-size: 28px; font-weight: 500; }
+
+    /* Footer */
+    .footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 12px;
+      color: #b4b2a9;
+    }
+    .footer strong { color: #888780; font-weight: 500; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-area">
+      <div class="logo-circle">AISO</div>
+      <div>
+        <div class="logo-text">AISO Privacy Tool</div>
+        <div class="logo-sub">AI Student Organisation Amsterdam</div>
+      </div>
+    </div>
+    <span class="header-tag">GDPR · AI Act</span>
+  </div>
+
+  <!-- Step: Intro -->
+  <div id="step-intro" class="step active">
+    <div class="card">
+      <h1 style="font-size: 20px; font-weight: 500; margin-bottom: 8px;">Privacy Risk Assessment</h1>
+      <p style="font-size: 14px; color: #5f5e5a; margin-bottom: 1.5rem; line-height: 1.6;">Answer 6 questions about your organization. The tool generates a risk map with priorities and recommendations under the GDPR and EU AI Act.</p>
+      <div class="intro-grid">
+        <div class="intro-icon-card">
+          <i class="ti ti-shield-check" style="font-size: 22px; color: #185FA5;"></i>
+          <p>GDPR-aligned</p>
+        </div>
+        <div class="intro-icon-card">
+          <i class="ti ti-robot" style="font-size: 22px; color: #534AB7;"></i>
+          <p>AI Act-aware</p>
+        </div>
+        <div class="intro-icon-card">
+          <i class="ti ti-file-report" style="font-size: 22px; color: #0F6E56;"></i>
+          <p>Actionable output</p>
+        </div>
+      </div>
+      <button class="nav-btn primary" style="width: 100%; text-align: center; padding: 12px;" onclick="startAssessment()">
+        Start assessment &nbsp;<i class="ti ti-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Step: Questions -->
+  <div id="step-q" class="step">
+    <div class="card">
+      <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      <div class="q-label" id="q-counter"></div>
+      <div class="q-title" id="q-text"></div>
+      <div id="q-options"></div>
+      <div style="display:flex; justify-content:space-between; margin-top: 1rem;">
+        <button class="nav-btn" onclick="prevQ()"><i class="ti ti-arrow-left"></i> Back</button>
+        <button class="nav-btn primary" id="next-btn" style="display:none;" onclick="nextQ()">Next <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step: Results -->
+  <div id="step-result" class="step">
+    <div class="card">
+      <div class="score-row">
+        <div>
+          <div class="score-label">Overall risk level</div>
+          <div class="score-value" id="overall-label"></div>
+        </div>
+        <div style="text-align: right;">
+          <div class="score-label">Risk score</div>
+          <div class="score-value" id="overall-score"></div>
+        </div>
+      </div>
+      <div style="background: #f5f5f3; border-radius: 8px; padding: 14px 16px; margin-bottom: 4px;">
+        <div style="font-size: 12px; color: #888780; margin-bottom: 10px;">Risk breakdown by area</div>
+        <div id="meters"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Priority risks</div>
+    <div id="risk-cards"></div>
+
+    <div class="section-title">Recommendations</div>
+    <div class="card">
+      <div id="rec-list"></div>
+    </div>
+
+    <div style="display: flex; gap: 8px; margin-top: 1rem; flex-wrap: wrap;">
+      <button class="nav-btn" onclick="restart()"><i class="ti ti-refresh"></i> Restart</button>
+      <button class="nav-btn" onclick="window.print()"><i class="ti ti-printer"></i> Print / Save PDF</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Made by <strong>Leonardo Pelizzon</strong> &nbsp;·&nbsp; AISO — AI Student Organisation Amsterdam &nbsp;·&nbsp; <strong>GDPR / EU AI Act</strong>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    text: "What type of organization are you assessing?",
+    key: "orgType",
+    opts: [
+      { label: "Student association or non-profit", scores: { lawful: 0, special: 0, ai: 0, breach: 1, dsr: 0, retention: 1 } },
+      { label: "SME / startup", scores: { lawful: 1, special: 0, ai: 1, breach: 2, dsr: 1, retention: 1 } },
+      { label: "Enterprise / large company", scores: { lawful: 2, special: 1, ai: 2, breach: 3, dsr: 2, retention: 2 } },
+      { label: "Public authority / institution", scores: { lawful: 1, special: 2, ai: 1, breach: 2, dsr: 2, retention: 2 } }
+    ]
+  },
+  {
+    text: "What categories of personal data do you process?",
+    key: "dataTypes",
+    opts: [
+      { label: "Basic contact data only (name, email)", scores: { lawful: 0, special: 0, ai: 0, breach: 1, dsr: 1, retention: 0 } },
+      { label: "Behavioral / usage data (clicks, location, preferences)", scores: { lawful: 2, special: 0, ai: 2, breach: 2, dsr: 2, retention: 2 } },
+      { label: "Special categories (health, biometric, political views…)", scores: { lawful: 3, special: 4, ai: 2, breach: 4, dsr: 3, retention: 3 } },
+      { label: "Financial or payment data", scores: { lawful: 2, special: 1, ai: 1, breach: 3, dsr: 2, retention: 2 } }
+    ]
+  },
+  {
+    text: "Do you use automated decision-making or AI systems that affect individuals?",
+    key: "aiUse",
+    opts: [
+      { label: "No AI or automation", scores: { lawful: 0, special: 0, ai: 0, breach: 0, dsr: 0, retention: 0 } },
+      { label: "AI for internal tasks only (not affecting data subjects)", scores: { lawful: 0, special: 0, ai: 1, breach: 1, dsr: 0, retention: 0 } },
+      { label: "AI that profiles or scores individuals", scores: { lawful: 2, special: 2, ai: 4, breach: 2, dsr: 3, retention: 1 } },
+      { label: "AI with automated decisions (no human review)", scores: { lawful: 3, special: 2, ai: 5, breach: 2, dsr: 4, retention: 1 } }
+    ]
+  },
+  {
+    text: "How do you handle data subject requests (access, deletion, portability)?",
+    key: "dsrProcess",
+    opts: [
+      { label: "Formal process with documented procedures", scores: { lawful: 0, special: 0, ai: 0, breach: 0, dsr: 0, retention: 0 } },
+      { label: "Informal — handled ad hoc", scores: { lawful: 1, special: 0, ai: 0, breach: 0, dsr: 3, retention: 1 } },
+      { label: "No defined process", scores: { lawful: 1, special: 0, ai: 0, breach: 0, dsr: 5, retention: 2 } }
+    ]
+  },
+  {
+    text: "Do you transfer personal data outside the EU/EEA?",
+    key: "transfers",
+    opts: [
+      { label: "No — all data stays within EU/EEA", scores: { lawful: 0, special: 0, ai: 0, breach: 0, dsr: 0, retention: 0 } },
+      { label: "Yes — to adequacy-decision countries", scores: { lawful: 1, special: 0, ai: 0, breach: 1, dsr: 0, retention: 0 } },
+      { label: "Yes — to third countries with SCCs or BCRs", scores: { lawful: 2, special: 1, ai: 1, breach: 2, dsr: 1, retention: 1 } },
+      { label: "Yes — transfer basis unclear", scores: { lawful: 4, special: 2, ai: 1, breach: 2, dsr: 1, retention: 1 } }
+    ]
+  },
+  {
+    text: "How would you describe your data retention practices?",
+    key: "retention",
+    opts: [
+      { label: "Documented policy with automatic deletion", scores: { lawful: 0, special: 0, ai: 0, breach: 0, dsr: 0, retention: 0 } },
+      { label: "Policy exists but not consistently applied", scores: { lawful: 1, special: 0, ai: 0, breach: 1, dsr: 1, retention: 2 } },
+      { label: "Data kept indefinitely or no clear policy", scores: { lawful: 2, special: 1, ai: 0, breach: 2, dsr: 2, retention: 4 } }
+    ]
+  }
+];
+
+const dimensions = {
+  lawful:    { label: "Lawful basis & transparency", art: "Art. 5–6 GDPR" },
+  special:   { label: "Special category data",        art: "Art. 9 GDPR" },
+  ai:        { label: "AI & automated decisions",     art: "Art. 22 GDPR / AI Act" },
+  breach:    { label: "Breach & security risk",       art: "Art. 32–33 GDPR" },
+  dsr:       { label: "Data subject rights",          art: "Art. 15–22 GDPR" },
+  retention: { label: "Retention & minimization",     art: "Art. 5(1)(e) GDPR" }
+};
+
+const maxScores = { lawful: 10, special: 9, ai: 10, breach: 10, dsr: 9, retention: 9 };
+
+let answers = {}, scores = {}, currentQ = 0;
+
+function startAssessment() {
+  currentQ = 0; answers = {};
+  scores = { lawful:0, special:0, ai:0, breach:0, dsr:0, retention:0 };
+  showStep('step-q'); renderQ();
+}
+
+function showStep(id) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function renderQ() {
+  const q = questions[currentQ];
+  document.getElementById('q-counter').textContent = 'Question ' + (currentQ + 1) + ' of ' + questions.length;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('prog').style.width = Math.round((currentQ / questions.length) * 100) + '%';
+  const container = document.getElementById('q-options');
+  container.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn' + (answers[q.key] === i ? ' selected' : '');
+    btn.textContent = opt.label;
+    btn.onclick = () => selectOpt(i);
+    container.appendChild(btn);
+  });
+  document.getElementById('next-btn').style.display = answers[q.key] !== undefined ? 'block' : 'none';
+}
+
+function selectOpt(i) {
+  answers[questions[currentQ].key] = i;
+  document.querySelectorAll('#q-options .opt-btn').forEach((b, idx) => b.classList.toggle('selected', idx === i));
+  document.getElementById('next-btn').style.display = 'block';
+}
+
+function nextQ() {
+  if (answers[questions[currentQ].key] === undefined) return;
+  currentQ++;
+  if (currentQ >= questions.length) computeResults(); else renderQ();
+}
+
+function prevQ() {
+  if (currentQ === 0) { showStep('step-intro'); return; }
+  currentQ--; renderQ();
+}
+
+function computeResults() {
+  scores = { lawful:0, special:0, ai:0, breach:0, dsr:0, retention:0 };
+  questions.forEach(q => {
+    const ai = answers[q.key];
+    if (ai !== undefined) Object.keys(q.opts[ai].scores).forEach(k => { scores[k] += q.opts[ai].scores[k]; });
+  });
+
+  const totalMax = Object.values(maxScores).reduce((a,b) => a+b, 0);
+  const totalScore = Object.values(scores).reduce((a,b) => a+b, 0);
+  const pct = Math.round((totalScore / totalMax) * 100);
+
+  let overallLabel, overallColor;
+  if (pct < 25) { overallLabel = 'Low risk'; overallColor = '#3B6D11'; }
+  else if (pct < 55) { overallLabel = 'Medium risk'; overallColor = '#BA7517'; }
+  else { overallLabel = 'High risk'; overallColor = '#A32D2D'; }
+
+  document.getElementById('overall-label').textContent = overallLabel;
+  document.getElementById('overall-label').style.color = overallColor;
+  document.getElementById('overall-score').textContent = pct + ' / 100';
+
+  const metersEl = document.getElementById('meters');
+  metersEl.innerHTML = '';
+  Object.entries(scores).forEach(([k, v]) => {
+    const dpct = Math.round((v / maxScores[k]) * 100);
+    const color = dpct < 30 ? '#639922' : dpct < 60 ? '#BA7517' : '#E24B4A';
+    metersEl.innerHTML += `<div style="margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:#888780;">
+        <span>${dimensions[k].label}</span><span style="font-weight:500;color:#1a1a18;">${dpct}%</span>
+      </div>
+      <div class="meter-track"><div class="meter-fill" style="width:${dpct}%;background:${color};"></div></div>
+    </div>`;
+  });
+
+  const sorted = Object.entries(scores).sort((a,b) => (b[1]/maxScores[b[0]]) - (a[1]/maxScores[a[0]]));
+  const cardsEl = document.getElementById('risk-cards');
+  cardsEl.innerHTML = '';
+  sorted.slice(0,3).forEach(([k, v]) => {
+    const dpct = Math.round((v / maxScores[k]) * 100);
+    if (dpct < 10) return;
+    const badgeClass = dpct < 30 ? 'badge-low' : dpct < 60 ? 'badge-medium' : 'badge-high';
+    const level = dpct < 30 ? 'Low' : dpct < 60 ? 'Medium' : 'High';
+    cardsEl.innerHTML += `<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+        <div style="font-size:14px;font-weight:500;">${dimensions[k].label}</div>
+        <span class="badge ${badgeClass}">${level}</span>
+      </div>
+      <span class="article-tag">${dimensions[k].art}</span>
+      <p style="font-size:13px;color:#5f5e5a;margin-top:8px;">${getRec(k).short}</p>
+    </div>`;
+  });
+
+  const recEl = document.getElementById('rec-list');
+  recEl.innerHTML = '';
+  sorted.forEach(([k, v]) => {
+    const dpct = Math.round((v / maxScores[k]) * 100);
+    if (dpct < 15) return;
+    recEl.innerHTML += `<div class="rec-item">
+      <i class="ti ti-arrow-right" style="margin-top:2px;flex-shrink:0;color:#185FA5;"></i>
+      <span>${getRec(k).action} &nbsp;<span class="article-tag">${dimensions[k].art}</span></span>
+    </div>`;
+  });
+
+  showStep('step-result');
+}
+
+function getRec(k) {
+  const recs = {
+    lawful:    { short: "Gaps identified in lawful basis documentation or transparency notices.", action: "Review and document a lawful basis for each processing activity; update your privacy notice." },
+    special:   { short: "Special category data requires explicit consent or another Art. 9 derogation.", action: "Map all special category data flows; obtain explicit consent or rely on a documented derogation." },
+    ai:        { short: "Automated profiling or AI decisions require human oversight and explainability safeguards.", action: "Conduct an AI impact assessment; implement human-in-the-loop review for high-risk decisions." },
+    breach:    { short: "Security controls and breach notification procedures need strengthening.", action: "Implement a documented incident response plan and test breach notification within 72 hours." },
+    dsr:       { short: "No clear process to handle access, deletion, or portability requests within 30 days.", action: "Create a formal DSR intake and response workflow with assigned responsibility." },
+    retention: { short: "Data retained beyond its purpose without defined schedules.", action: "Implement a data retention schedule with automatic deletion triggers per data category." }
+  };
+  return recs[k];
+}
+
+function restart() {
+  answers = {}; scores = {}; currentQ = 0; showStep('step-intro');
+}
+</script>
+</body>
+</html>
