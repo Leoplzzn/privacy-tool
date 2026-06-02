@@ -4,56 +4,134 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Risk Dashboard — AISO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --eu-blue: #003399;
+      --eu-blue-mid: #1a4db3;
+      --eu-blue-light: #ccd6f0;
+      --eu-blue-pale: #e8eef8;
+      --eu-gold: #FFCC00;
+      --eu-gold-dim: #e6b800;
+      --white: #ffffff;
+      --off-white: #f4f5f8;
+      --text-dark: #0d1b3e;
+      --text-mid: #3a4a6b;
+      --text-muted: #7a87a8;
+      --border: rgba(0, 51, 153, 0.15);
+      --border-strong: rgba(0, 51, 153, 0.3);
+      --red: #c0392b;
+      --red-bg: #fdf0ee;
+      --amber: #b7590a;
+      --amber-bg: #fef4e6;
+      --green: #1a6b35;
+      --green-bg: #eaf4ee;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f5f5f3;
-      color: #1a1a18;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--off-white);
+      color: var(--text-dark);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem 1rem 4rem;
+      padding: 0 0 4rem;
+    }
+
+    /* Top bar */
+    .topbar {
+      width: 100%;
+      background: var(--eu-blue);
+      padding: 0.6rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .eu-stars {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .eu-stars span {
+      color: var(--eu-gold);
+      font-size: 10px;
+      line-height: 1;
+    }
+    .topbar-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.02em;
+    }
+    .topbar-badge {
+      font-size: 11px;
+      background: rgba(255,204,0,0.2);
+      color: var(--eu-gold);
+      border: 1px solid rgba(255,204,0,0.35);
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
     }
 
     .container {
       width: 100%;
-      max-width: 680px;
+      max-width: 660px;
+      padding: 0 1rem;
     }
 
-    /* Header */
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* Page title area */
+    .page-header {
       margin-bottom: 2rem;
-      padding-bottom: 1.25rem;
-      border-bottom: 0.5px solid #d3d1c7;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
     }
-    .logo-area { display: flex; align-items: center; gap: 12px; }
-    .logo-circle {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: #185FA5;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 13px; font-weight: 600; letter-spacing: 0.03em;
+    .page-header-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--eu-blue);
+      margin-bottom: 8px;
     }
-    .logo-text { font-size: 15px; font-weight: 500; color: #1a1a18; }
-    .logo-sub { font-size: 12px; color: #888780; margin-top: 1px; }
-    .header-tag {
-      font-size: 11px; background: #E6F1FB; color: #185FA5;
-      border: 0.5px solid #B5D4F4; border-radius: 6px; padding: 3px 10px;
+    .page-header h1 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--text-dark);
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+    .page-header p {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.6;
     }
 
     /* Card */
     .card {
-      background: #fff;
-      border: 0.5px solid #d3d1c7;
-      border-radius: 12px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       padding: 1.5rem;
       margin-bottom: 12px;
+    }
+    .card-blue {
+      background: var(--eu-blue);
+      border-color: var(--eu-blue);
     }
 
     /* Steps */
@@ -61,116 +139,225 @@
     .step.active { display: block; }
 
     /* Progress */
-    .progress-bar { height: 4px; background: #e8e8e4; border-radius: 2px; margin-bottom: 2rem; }
-    .progress-fill { height: 4px; border-radius: 2px; background: #185FA5; transition: width 0.3s ease; }
+    .progress-wrap { margin-bottom: 1.75rem; }
+    .progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .progress-bar { height: 3px; background: var(--eu-blue-light); border-radius: 2px; }
+    .progress-fill { height: 3px; border-radius: 2px; background: var(--eu-blue); transition: width 0.4s ease; }
 
     /* Question */
-    .q-label { font-size: 13px; color: #888780; margin-bottom: 6px; }
-    .q-title { font-size: 17px; font-weight: 500; margin-bottom: 1.25rem; line-height: 1.45; color: #1a1a18; }
+    .q-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--eu-blue);
+      margin-bottom: 8px;
+    }
+    .q-title {
+      font-family: 'Source Serif 4', serif;
+      font-size: 18px; font-weight: 400;
+      color: var(--text-dark);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
 
     /* Option buttons */
     .opt-btn {
-      display: block; width: 100%; text-align: left;
-      background: #fff; border: 0.5px solid #c0bfb6;
-      border-radius: 8px; padding: 11px 14px; margin-bottom: 8px;
-      cursor: pointer; font-size: 14px; color: #1a1a18;
-      transition: background 0.15s, border-color 0.15s;
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; text-align: left;
+      background: var(--white);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-dark);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s;
     }
-    .opt-btn:hover { background: #f5f5f3; }
-    .opt-btn.selected { border: 1.5px solid #185FA5; background: #E6F1FB; color: #0C447C; }
+    .opt-btn:hover { background: var(--eu-blue-pale); border-color: var(--eu-blue); }
+    .opt-btn.selected {
+      border: 1.5px solid var(--eu-blue);
+      background: var(--eu-blue-pale);
+      color: var(--eu-blue);
+    }
+    .opt-radio {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 1.5px solid var(--border-strong);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .opt-btn.selected .opt-radio {
+      border-color: var(--eu-blue);
+      background: var(--eu-blue);
+    }
+    .opt-btn.selected .opt-radio::after {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: white;
+    }
 
     /* Nav buttons */
     .nav-btn {
-      background: #fff; border: 0.5px solid #c0bfb6; border-radius: 8px;
-      padding: 9px 18px; cursor: pointer; font-size: 14px; color: #1a1a18;
-      transition: background 0.15s;
+      background: var(--white);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      padding: 9px 20px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-dark);
+      transition: all 0.15s;
     }
-    .nav-btn:hover { background: #f5f5f3; }
-    .nav-btn.primary { background: #185FA5; color: #fff; border-color: #185FA5; font-weight: 500; }
-    .nav-btn.primary:hover { background: #0C447C; }
+    .nav-btn:hover { background: var(--eu-blue-pale); }
+    .nav-btn.primary {
+      background: var(--eu-blue);
+      color: var(--white);
+      border-color: var(--eu-blue);
+      font-weight: 500;
+    }
+    .nav-btn.primary:hover { background: var(--eu-blue-mid); }
 
     /* Badges */
-    .badge { font-size: 11px; padding: 3px 10px; border-radius: 6px; font-weight: 500; display: inline-block; }
-    .badge-high { background: #FCEBEB; color: #A32D2D; }
-    .badge-medium { background: #FAEEDA; color: #854F0B; }
-    .badge-low { background: #EAF3DE; color: #3B6D11; }
+    .badge { font-size: 11px; padding: 3px 10px; border-radius: 4px; font-weight: 500; display: inline-block; letter-spacing: 0.02em; }
+    .badge-high { background: var(--red-bg); color: var(--red); border: 1px solid rgba(192,57,43,0.2); }
+    .badge-medium { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(183,89,10,0.2); }
+    .badge-low { background: var(--green-bg); color: var(--green); border: 1px solid rgba(26,107,53,0.2); }
 
     /* Meters */
-    .meter-track { height: 8px; background: #e8e8e4; border-radius: 4px; margin-top: 5px; }
-    .meter-fill { height: 8px; border-radius: 4px; }
+    .meter-track { height: 6px; background: var(--eu-blue-light); border-radius: 3px; margin-top: 5px; }
+    .meter-fill { height: 6px; border-radius: 3px; }
 
     /* Article tag */
     .article-tag {
-      font-size: 11px; background: #f1efe8; border: 0.5px solid #d3d1c7;
-      border-radius: 6px; padding: 2px 7px; color: #5f5e5a; white-space: nowrap;
+      font-size: 11px;
+      background: var(--eu-blue-pale);
+      border: 1px solid var(--eu-blue-light);
+      border-radius: 4px;
+      padding: 2px 8px;
+      color: var(--eu-blue);
+      white-space: nowrap;
+      font-weight: 500;
+      letter-spacing: 0.02em;
     }
 
-    /* Risk section title */
     .section-title {
-      font-size: 12px; font-weight: 500; color: #888780;
-      text-transform: uppercase; letter-spacing: 0.05em;
+      font-size: 11px; font-weight: 500; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
       margin: 1.5rem 0 0.75rem;
     }
 
-    /* Rec items */
-    .rec-item { font-size: 13px; color: #5f5e5a; margin-bottom: 8px; display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
+    .rec-item {
+      font-size: 13px; color: var(--text-mid);
+      margin-bottom: 10px;
+      display: flex; gap: 10px; align-items: flex-start;
+      line-height: 1.55;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .rec-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 
-    /* Intro icons */
-    .intro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.75rem; }
-    .intro-icon-card { background: #f5f5f3; border-radius: 8px; padding: 14px; text-align: center; }
-    .intro-icon-card p { font-size: 12px; color: #888780; margin: 6px 0 0; }
+    .score-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; }
+    .score-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 4px; }
+    .score-value { font-family: 'Source Serif 4', serif; font-size: 30px; font-weight: 600; }
 
-    /* Overall score row */
-    .score-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
-    .score-label { font-size: 13px; color: #888780; margin-bottom: 2px; }
-    .score-value { font-size: 28px; font-weight: 500; }
+    .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+
+    /* Intro feature row */
+    .feature-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.75rem; }
+    .feature-item {
+      background: var(--eu-blue-pale);
+      border: 1px solid var(--eu-blue-light);
+      border-radius: 6px;
+      padding: 14px 12px;
+      text-align: center;
+    }
+    .feature-item i { font-size: 20px; color: var(--eu-blue); display: block; margin-bottom: 6px; }
+    .feature-item span { font-size: 12px; color: var(--text-mid); font-weight: 400; }
 
     /* Footer */
     .footer {
       margin-top: 2.5rem;
-      text-align: center;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       font-size: 12px;
-      color: #b4b2a9;
+      color: var(--text-muted);
     }
-    .footer strong { color: #888780; font-weight: 500; }
+    .footer-left { display: flex; align-items: center; gap: 8px; }
+    .footer-dot { color: var(--eu-blue-light); }
+
+    /* EU flag mini */
+    .eu-flag-mini {
+      width: 28px; height: 19px;
+      background: var(--eu-blue);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .eu-flag-mini span { color: var(--eu-gold); font-size: 7px; letter-spacing: 1px; }
   </style>
 </head>
 <body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="45" height="30" style="flex-shrink:0;border-radius:2px;border:1px solid rgba(255,255,255,0.2);">
+      <rect width="900" height="600" fill="#003399"/>
+      <g fill="#FFCC00">
+        <polygon points="450.0,128.0 455.29,142.72 470.92,143.2 458.56,152.78 462.93,167.8 450.0,159.0 437.07,167.8 441.44,152.78 429.08,143.2 444.71,142.72"/>
+        <polygon points="525.0,148.1 530.29,162.82 545.92,163.3 533.56,172.88 537.93,187.89 525.0,179.1 512.07,187.89 516.44,172.88 504.08,163.3 519.71,162.82"/>
+        <polygon points="579.9,203.0 585.19,217.72 600.83,218.2 588.46,227.78 592.84,242.8 579.9,234.0 566.97,242.8 571.34,227.78 558.98,218.2 574.61,217.72"/>
+        <polygon points="600.0,278.0 605.29,292.72 620.92,293.2 608.56,302.78 612.93,317.8 600.0,309.0 587.07,317.8 591.44,302.78 579.08,293.2 594.71,292.72"/>
+        <polygon points="579.9,353.0 585.19,367.72 600.83,368.2 588.46,377.78 592.84,392.8 579.9,384.0 566.97,392.8 571.34,377.78 558.98,368.2 574.61,367.72"/>
+        <polygon points="525.0,407.9 530.29,422.62 545.92,423.11 533.56,432.68 537.93,447.7 525.0,438.9 512.07,447.7 516.44,432.68 504.08,423.11 519.71,422.62"/>
+        <polygon points="450.0,428.0 455.29,442.72 470.92,443.2 458.56,452.78 462.93,467.8 450.0,459.0 437.07,467.8 441.44,452.78 429.08,443.2 444.71,442.72"/>
+        <polygon points="375.0,407.9 380.29,422.62 395.92,423.11 383.56,432.68 387.93,447.7 375.0,438.9 362.07,447.7 366.44,432.68 354.08,423.11 369.71,422.62"/>
+        <polygon points="320.1,353.0 325.39,367.72 341.02,368.2 328.66,377.78 333.03,392.8 320.1,384.0 307.16,392.8 311.54,377.78 299.17,368.2 314.81,367.72"/>
+        <polygon points="300.0,278.0 305.29,292.72 320.92,293.2 308.56,302.78 312.93,317.8 300.0,309.0 287.07,317.8 291.44,302.78 279.08,293.2 294.71,292.72"/>
+        <polygon points="320.1,203.0 325.39,217.72 341.02,218.2 328.66,227.78 333.03,242.8 320.1,234.0 307.16,242.8 311.54,227.78 299.17,218.2 314.81,217.72"/>
+        <polygon points="375.0,148.1 380.29,162.82 395.92,163.3 383.56,172.88 387.93,187.89 375.0,179.1 362.07,187.89 366.44,172.88 354.08,163.3 369.71,162.82"/>
+      </g>
+    </svg>
+    <div class="topbar-title">AISO Privacy Tool &nbsp;·&nbsp; AI Student Organisation Amsterdam</div>
+  </div>
+  <span class="topbar-badge">GDPR · AI Act</span>
+</div>
+
 <div class="container">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="logo-area">
-      <div class="logo-circle">AISO</div>
-      <div>
-        <div class="logo-text">AISO Privacy Tool</div>
-        <div class="logo-sub">AI Student Organisation Amsterdam</div>
-      </div>
-    </div>
-    <span class="header-tag">GDPR · AI Act</span>
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-header-eyebrow">Privacy Risk Assessment</div>
+    <h1>Data Protection<br>Risk Dashboard</h1>
+    <p>A structured screening tool based on the GDPR and EU AI Act. Answer 6 questions to generate a risk map with article-level recommendations.</p>
   </div>
 
   <!-- Step: Intro -->
   <div id="step-intro" class="step active">
-    <div class="card">
-      <h1 style="font-size: 20px; font-weight: 500; margin-bottom: 8px;">Privacy Risk Assessment</h1>
-      <p style="font-size: 14px; color: #5f5e5a; margin-bottom: 1.5rem; line-height: 1.6;">Answer 6 questions about your organization. The tool generates a risk map with priorities and recommendations under the GDPR and EU AI Act.</p>
-      <div class="intro-grid">
-        <div class="intro-icon-card">
-          <i class="ti ti-shield-check" style="font-size: 22px; color: #185FA5;"></i>
-          <p>GDPR-aligned</p>
-        </div>
-        <div class="intro-icon-card">
-          <i class="ti ti-robot" style="font-size: 22px; color: #534AB7;"></i>
-          <p>AI Act-aware</p>
-        </div>
-        <div class="intro-icon-card">
-          <i class="ti ti-file-report" style="font-size: 22px; color: #0F6E56;"></i>
-          <p>Actionable output</p>
-        </div>
+    <div class="feature-row">
+      <div class="feature-item">
+        <i class="ti ti-shield-check"></i>
+        <span>GDPR-aligned</span>
       </div>
-      <button class="nav-btn primary" style="width: 100%; text-align: center; padding: 12px;" onclick="startAssessment()">
-        Start assessment &nbsp;<i class="ti ti-arrow-right"></i>
+      <div class="feature-item">
+        <i class="ti ti-robot"></i>
+        <span>AI Act-aware</span>
+      </div>
+      <div class="feature-item">
+        <i class="ti ti-file-report"></i>
+        <span>Actionable output</span>
+      </div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--eu-blue); padding-left: 1.25rem;">
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.65;">This tool is a <strong style="color: var(--text-dark); font-weight: 500;">screening instrument</strong>, not a substitute for a formal DPIA under Art. 35 GDPR. Results indicate risk areas and recommended actions — always consult a qualified DPO for high-risk processing activities.</p>
+    </div>
+    <div style="margin-top: 1.25rem;">
+      <button class="nav-btn primary" style="width: 100%; text-align: center; padding: 13px; font-size: 15px;" onclick="startAssessment()">
+        Begin assessment &nbsp;<i class="ti ti-arrow-right"></i>
       </button>
     </div>
   </div>
@@ -178,13 +365,20 @@
   <!-- Step: Questions -->
   <div id="step-q" class="step">
     <div class="card">
-      <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
-      <div class="q-label" id="q-counter"></div>
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="q-counter"></span>
+          <span id="q-pct"></span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+      </div>
+      <div class="q-label" id="q-area"></div>
       <div class="q-title" id="q-text"></div>
       <div id="q-options"></div>
-      <div style="display:flex; justify-content:space-between; margin-top: 1rem;">
+      <div class="divider"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
         <button class="nav-btn" onclick="prevQ()"><i class="ti ti-arrow-left"></i> Back</button>
-        <button class="nav-btn primary" id="next-btn" style="display:none;" onclick="nextQ()">Next <i class="ti ti-arrow-right"></i></button>
+        <button class="nav-btn primary" id="next-btn" style="display:none;" onclick="nextQ()">Continue <i class="ti ti-arrow-right"></i></button>
       </div>
     </div>
   </div>
@@ -202,91 +396,84 @@
           <div class="score-value" id="overall-score"></div>
         </div>
       </div>
-      <div style="background: #f5f5f3; border-radius: 8px; padding: 14px 16px; margin-bottom: 4px;">
-        <div style="font-size: 12px; color: #888780; margin-bottom: 10px;">Risk breakdown by area</div>
-        <div id="meters"></div>
-      </div>
+      <div class="divider"></div>
+      <div style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 12px;">Risk breakdown by area</div>
+      <div id="meters"></div>
     </div>
 
-    <div class="section-title">Priority risks</div>
+    <div class="section-title">Priority risk areas</div>
     <div id="risk-cards"></div>
 
-    <div class="section-title">Recommendations</div>
+    <div class="section-title">Recommended actions</div>
     <div class="card">
       <div id="rec-list"></div>
     </div>
 
     <div style="display: flex; gap: 8px; margin-top: 1rem; flex-wrap: wrap;">
-      <button class="nav-btn" onclick="restart()"><i class="ti ti-refresh"></i> Restart</button>
+      <button class="nav-btn" onclick="restart()"><i class="ti ti-refresh"></i> New assessment</button>
       <button class="nav-btn" onclick="window.print()"><i class="ti ti-printer"></i> Print / Save PDF</button>
     </div>
   </div>
 
   <!-- Footer -->
   <div class="footer">
-    Made by <strong>Leonardo Pelizzon</strong> &nbsp;·&nbsp; AISO — AI Student Organisation Amsterdam &nbsp;·&nbsp; <strong>GDPR / EU AI Act</strong>
+    <div class="footer-left">
+      <div class="eu-flag-mini"><span>★★★</span></div>
+      <span>Made by <strong style="color: var(--text-dark); font-weight: 500;">Leonardo Pelizzon</strong></span>
+      <span class="footer-dot">·</span>
+      <span>AISO Amsterdam</span>
+    </div>
+    <span>GDPR Reg. 2016/679 · EU AI Act 2024/1689</span>
   </div>
 
 </div>
 
 <script>
 const questions = [
-  {
-    text: "What type of organization are you assessing?",
-    key: "orgType",
+  { text: "What type of organization are you assessing?", area: "Organization profile", key: "orgType",
     opts: [
-      { label: "Student association or non-profit", scores: { lawful: 0, special: 0, ai: 0, breach: 1, dsr: 0, retention: 1 } },
-      { label: "SME / startup", scores: { lawful: 1, special: 0, ai: 1, breach: 2, dsr: 1, retention: 1 } },
-      { label: "Enterprise / large company", scores: { lawful: 2, special: 1, ai: 2, breach: 3, dsr: 2, retention: 2 } },
-      { label: "Public authority / institution", scores: { lawful: 1, special: 2, ai: 1, breach: 2, dsr: 2, retention: 2 } }
+      { label: "Student association or non-profit", scores: { lawful:0, special:0, ai:0, breach:1, dsr:0, retention:1 } },
+      { label: "SME / startup", scores: { lawful:1, special:0, ai:1, breach:2, dsr:1, retention:1 } },
+      { label: "Enterprise / large company", scores: { lawful:2, special:1, ai:2, breach:3, dsr:2, retention:2 } },
+      { label: "Public authority / institution", scores: { lawful:1, special:2, ai:1, breach:2, dsr:2, retention:2 } }
     ]
   },
-  {
-    text: "What categories of personal data do you process?",
-    key: "dataTypes",
+  { text: "What categories of personal data do you process?", area: "Data categories", key: "dataTypes",
     opts: [
-      { label: "Basic contact data only (name, email)", scores: { lawful: 0, special: 0, ai: 0, breach: 1, dsr: 1, retention: 0 } },
-      { label: "Behavioral / usage data (clicks, location, preferences)", scores: { lawful: 2, special: 0, ai: 2, breach: 2, dsr: 2, retention: 2 } },
-      { label: "Special categories (health, biometric, political views…)", scores: { lawful: 3, special: 4, ai: 2, breach: 4, dsr: 3, retention: 3 } },
-      { label: "Financial or payment data", scores: { lawful: 2, special: 1, ai: 1, breach: 3, dsr: 2, retention: 2 } }
+      { label: "Basic contact data only (name, email)", scores: { lawful:0, special:0, ai:0, breach:1, dsr:1, retention:0 } },
+      { label: "Behavioral / usage data (clicks, location, preferences)", scores: { lawful:2, special:0, ai:2, breach:2, dsr:2, retention:2 } },
+      { label: "Special categories (health, biometric, political views…)", scores: { lawful:3, special:4, ai:2, breach:4, dsr:3, retention:3 } },
+      { label: "Financial or payment data", scores: { lawful:2, special:1, ai:1, breach:3, dsr:2, retention:2 } }
     ]
   },
-  {
-    text: "Do you use automated decision-making or AI systems that affect individuals?",
-    key: "aiUse",
+  { text: "Do you use automated decision-making or AI systems that affect individuals?", area: "AI & automation", key: "aiUse",
     opts: [
-      { label: "No AI or automation", scores: { lawful: 0, special: 0, ai: 0, breach: 0, dsr: 0, retention: 0 } },
-      { label: "AI for internal tasks only (not affecting data subjects)", scores: { lawful: 0, special: 0, ai: 1, breach: 1, dsr: 0, retention: 0 } },
-      { label: "AI that profiles or scores individuals", scores: { lawful: 2, special: 2, ai: 4, breach: 2, dsr: 3, retention: 1 } },
-      { label: "AI with automated decisions (no human review)", scores: { lawful: 3, special: 2, ai: 5, breach: 2, dsr: 4, retention: 1 } }
+      { label: "No AI or automation", scores: { lawful:0, special:0, ai:0, breach:0, dsr:0, retention:0 } },
+      { label: "AI for internal tasks only (not affecting data subjects)", scores: { lawful:0, special:0, ai:1, breach:1, dsr:0, retention:0 } },
+      { label: "AI that profiles or scores individuals", scores: { lawful:2, special:2, ai:4, breach:2, dsr:3, retention:1 } },
+      { label: "AI with automated decisions (no human review)", scores: { lawful:3, special:2, ai:5, breach:2, dsr:4, retention:1 } }
     ]
   },
-  {
-    text: "How do you handle data subject requests (access, deletion, portability)?",
-    key: "dsrProcess",
+  { text: "How do you handle data subject requests (access, deletion, portability)?", area: "Data subject rights", key: "dsrProcess",
     opts: [
-      { label: "Formal process with documented procedures", scores: { lawful: 0, special: 0, ai: 0, breach: 0, dsr: 0, retention: 0 } },
-      { label: "Informal — handled ad hoc", scores: { lawful: 1, special: 0, ai: 0, breach: 0, dsr: 3, retention: 1 } },
-      { label: "No defined process", scores: { lawful: 1, special: 0, ai: 0, breach: 0, dsr: 5, retention: 2 } }
+      { label: "Formal process with documented procedures", scores: { lawful:0, special:0, ai:0, breach:0, dsr:0, retention:0 } },
+      { label: "Informal — handled ad hoc", scores: { lawful:1, special:0, ai:0, breach:0, dsr:3, retention:1 } },
+      { label: "No defined process", scores: { lawful:1, special:0, ai:0, breach:0, dsr:5, retention:2 } }
     ]
   },
-  {
-    text: "Do you transfer personal data outside the EU/EEA?",
-    key: "transfers",
+  { text: "Do you transfer personal data outside the EU/EEA?", area: "International transfers", key: "transfers",
     opts: [
-      { label: "No — all data stays within EU/EEA", scores: { lawful: 0, special: 0, ai: 0, breach: 0, dsr: 0, retention: 0 } },
-      { label: "Yes — to adequacy-decision countries", scores: { lawful: 1, special: 0, ai: 0, breach: 1, dsr: 0, retention: 0 } },
-      { label: "Yes — to third countries with SCCs or BCRs", scores: { lawful: 2, special: 1, ai: 1, breach: 2, dsr: 1, retention: 1 } },
-      { label: "Yes — transfer basis unclear", scores: { lawful: 4, special: 2, ai: 1, breach: 2, dsr: 1, retention: 1 } }
+      { label: "No — all data stays within EU/EEA", scores: { lawful:0, special:0, ai:0, breach:0, dsr:0, retention:0 } },
+      { label: "Yes — to adequacy-decision countries", scores: { lawful:1, special:0, ai:0, breach:1, dsr:0, retention:0 } },
+      { label: "Yes — to third countries with SCCs or BCRs", scores: { lawful:2, special:1, ai:1, breach:2, dsr:1, retention:1 } },
+      { label: "Yes — transfer basis unclear", scores: { lawful:4, special:2, ai:1, breach:2, dsr:1, retention:1 } }
     ]
   },
-  {
-    text: "How would you describe your data retention practices?",
-    key: "retention",
+  { text: "How would you describe your data retention practices?", area: "Retention & minimization", key: "retention",
     opts: [
-      { label: "Documented policy with automatic deletion", scores: { lawful: 0, special: 0, ai: 0, breach: 0, dsr: 0, retention: 0 } },
-      { label: "Policy exists but not consistently applied", scores: { lawful: 1, special: 0, ai: 0, breach: 1, dsr: 1, retention: 2 } },
-      { label: "Data kept indefinitely or no clear policy", scores: { lawful: 2, special: 1, ai: 0, breach: 2, dsr: 2, retention: 4 } }
+      { label: "Documented policy with automatic deletion", scores: { lawful:0, special:0, ai:0, breach:0, dsr:0, retention:0 } },
+      { label: "Policy exists but not consistently applied", scores: { lawful:1, special:0, ai:0, breach:1, dsr:1, retention:2 } },
+      { label: "Data kept indefinitely or no clear policy", scores: { lawful:2, special:1, ai:0, breach:2, dsr:2, retention:4 } }
     ]
   }
 ];
@@ -299,9 +486,7 @@ const dimensions = {
   dsr:       { label: "Data subject rights",          art: "Art. 15–22 GDPR" },
   retention: { label: "Retention & minimization",     art: "Art. 5(1)(e) GDPR" }
 };
-
-const maxScores = { lawful: 10, special: 9, ai: 10, breach: 10, dsr: 9, retention: 9 };
-
+const maxScores = { lawful:10, special:9, ai:10, breach:10, dsr:9, retention:9 };
 let answers = {}, scores = {}, currentQ = 0;
 
 function startAssessment() {
@@ -309,123 +494,111 @@ function startAssessment() {
   scores = { lawful:0, special:0, ai:0, breach:0, dsr:0, retention:0 };
   showStep('step-q'); renderQ();
 }
-
 function showStep(id) {
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-
 function renderQ() {
   const q = questions[currentQ];
-  document.getElementById('q-counter').textContent = 'Question ' + (currentQ + 1) + ' of ' + questions.length;
+  document.getElementById('q-counter').textContent = 'Question ' + (currentQ+1) + ' of ' + questions.length;
+  document.getElementById('q-pct').textContent = Math.round((currentQ/questions.length)*100) + '% complete';
+  document.getElementById('q-area').textContent = q.area;
   document.getElementById('q-text').textContent = q.text;
-  document.getElementById('prog').style.width = Math.round((currentQ / questions.length) * 100) + '%';
+  document.getElementById('prog').style.width = Math.round((currentQ/questions.length)*100) + '%';
   const container = document.getElementById('q-options');
   container.innerHTML = '';
   q.opts.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'opt-btn' + (answers[q.key] === i ? ' selected' : '');
-    btn.textContent = opt.label;
+    btn.innerHTML = '<div class="opt-radio"></div><span>' + opt.label + '</span>';
     btn.onclick = () => selectOpt(i);
     container.appendChild(btn);
   });
   document.getElementById('next-btn').style.display = answers[q.key] !== undefined ? 'block' : 'none';
 }
-
 function selectOpt(i) {
   answers[questions[currentQ].key] = i;
   document.querySelectorAll('#q-options .opt-btn').forEach((b, idx) => b.classList.toggle('selected', idx === i));
   document.getElementById('next-btn').style.display = 'block';
 }
-
 function nextQ() {
   if (answers[questions[currentQ].key] === undefined) return;
   currentQ++;
   if (currentQ >= questions.length) computeResults(); else renderQ();
 }
-
 function prevQ() {
   if (currentQ === 0) { showStep('step-intro'); return; }
   currentQ--; renderQ();
 }
-
 function computeResults() {
   scores = { lawful:0, special:0, ai:0, breach:0, dsr:0, retention:0 };
   questions.forEach(q => {
     const ai = answers[q.key];
     if (ai !== undefined) Object.keys(q.opts[ai].scores).forEach(k => { scores[k] += q.opts[ai].scores[k]; });
   });
-
   const totalMax = Object.values(maxScores).reduce((a,b) => a+b, 0);
   const totalScore = Object.values(scores).reduce((a,b) => a+b, 0);
-  const pct = Math.round((totalScore / totalMax) * 100);
-
+  const pct = Math.round((totalScore/totalMax)*100);
   let overallLabel, overallColor;
-  if (pct < 25) { overallLabel = 'Low risk'; overallColor = '#3B6D11'; }
-  else if (pct < 55) { overallLabel = 'Medium risk'; overallColor = '#BA7517'; }
-  else { overallLabel = 'High risk'; overallColor = '#A32D2D'; }
-
+  if (pct < 25) { overallLabel = 'Low risk'; overallColor = '#1a6b35'; }
+  else if (pct < 55) { overallLabel = 'Medium risk'; overallColor = '#b7590a'; }
+  else { overallLabel = 'High risk'; overallColor = '#c0392b'; }
   document.getElementById('overall-label').textContent = overallLabel;
   document.getElementById('overall-label').style.color = overallColor;
   document.getElementById('overall-score').textContent = pct + ' / 100';
-
   const metersEl = document.getElementById('meters');
   metersEl.innerHTML = '';
   Object.entries(scores).forEach(([k, v]) => {
-    const dpct = Math.round((v / maxScores[k]) * 100);
-    const color = dpct < 30 ? '#639922' : dpct < 60 ? '#BA7517' : '#E24B4A';
-    metersEl.innerHTML += `<div style="margin-bottom:10px;">
-      <div style="display:flex;justify-content:space-between;font-size:12px;color:#888780;">
-        <span>${dimensions[k].label}</span><span style="font-weight:500;color:#1a1a18;">${dpct}%</span>
+    const dpct = Math.round((v/maxScores[k])*100);
+    const color = dpct < 30 ? '#1a6b35' : dpct < 60 ? '#b7590a' : '#c0392b';
+    metersEl.innerHTML += `<div style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-bottom:4px;">
+        <span>${dimensions[k].label}</span>
+        <span style="font-weight:500;color:var(--text-dark);">${dpct}%</span>
       </div>
       <div class="meter-track"><div class="meter-fill" style="width:${dpct}%;background:${color};"></div></div>
     </div>`;
   });
-
-  const sorted = Object.entries(scores).sort((a,b) => (b[1]/maxScores[b[0]]) - (a[1]/maxScores[a[0]]));
+  const sorted = Object.entries(scores).sort((a,b) => (b[1]/maxScores[b[0]])-(a[1]/maxScores[a[0]]));
   const cardsEl = document.getElementById('risk-cards');
   cardsEl.innerHTML = '';
   sorted.slice(0,3).forEach(([k, v]) => {
-    const dpct = Math.round((v / maxScores[k]) * 100);
+    const dpct = Math.round((v/maxScores[k])*100);
     if (dpct < 10) return;
     const badgeClass = dpct < 30 ? 'badge-low' : dpct < 60 ? 'badge-medium' : 'badge-high';
     const level = dpct < 30 ? 'Low' : dpct < 60 ? 'Medium' : 'High';
-    cardsEl.innerHTML += `<div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <div style="font-size:14px;font-weight:500;">${dimensions[k].label}</div>
+    cardsEl.innerHTML += `<div class="card" style="border-left: 3px solid ${dpct>=60?'#c0392b':dpct>=30?'#b7590a':'#1a6b35'};">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+        <div style="font-size:14px;font-weight:500;color:var(--text-dark);">${dimensions[k].label}</div>
         <span class="badge ${badgeClass}">${level}</span>
       </div>
       <span class="article-tag">${dimensions[k].art}</span>
-      <p style="font-size:13px;color:#5f5e5a;margin-top:8px;">${getRec(k).short}</p>
+      <p style="font-size:13px;color:var(--text-mid);margin-top:10px;line-height:1.55;">${getRec(k).short}</p>
     </div>`;
   });
-
   const recEl = document.getElementById('rec-list');
   recEl.innerHTML = '';
   sorted.forEach(([k, v]) => {
-    const dpct = Math.round((v / maxScores[k]) * 100);
+    const dpct = Math.round((v/maxScores[k])*100);
     if (dpct < 15) return;
     recEl.innerHTML += `<div class="rec-item">
-      <i class="ti ti-arrow-right" style="margin-top:2px;flex-shrink:0;color:#185FA5;"></i>
+      <i class="ti ti-arrow-right" style="margin-top:2px;flex-shrink:0;color:var(--eu-blue);font-size:15px;"></i>
       <span>${getRec(k).action} &nbsp;<span class="article-tag">${dimensions[k].art}</span></span>
     </div>`;
   });
-
   showStep('step-result');
 }
-
 function getRec(k) {
   const recs = {
     lawful:    { short: "Gaps identified in lawful basis documentation or transparency notices.", action: "Review and document a lawful basis for each processing activity; update your privacy notice." },
     special:   { short: "Special category data requires explicit consent or another Art. 9 derogation.", action: "Map all special category data flows; obtain explicit consent or rely on a documented derogation." },
     ai:        { short: "Automated profiling or AI decisions require human oversight and explainability safeguards.", action: "Conduct an AI impact assessment; implement human-in-the-loop review for high-risk decisions." },
     breach:    { short: "Security controls and breach notification procedures need strengthening.", action: "Implement a documented incident response plan and test breach notification within 72 hours." },
-    dsr:       { short: "No clear process to handle access, deletion, or portability requests within 30 days.", action: "Create a formal DSR intake and response workflow with assigned responsibility." },
+    dsr:       { short: "No clear process to handle access, deletion or portability requests within 30 days.", action: "Create a formal DSR intake and response workflow with assigned responsibility." },
     retention: { short: "Data retained beyond its purpose without defined schedules.", action: "Implement a data retention schedule with automatic deletion triggers per data category." }
   };
   return recs[k];
 }
-
 function restart() {
   answers = {}; scores = {}; currentQ = 0; showStep('step-intro');
 }
